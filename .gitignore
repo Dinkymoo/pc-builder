@@ -1,0 +1,105 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+.venv/
+venv/
+ENV/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+dist/
+build/
+coverage/
+
+# Angular
+.angular/
+.angular/cache/
+.angular/local/
+.angular/tmp/
+*.ngfactory.ts
+*.ngstyle.ts
+*.ngsummary.json
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Data
+*.csv
+*.tsv
+*.sqlite
+*.db
+data-results/
+
+# Docker
+*.pid
+
+# Misc
+*.bak
+*.swp
+*.swo
+
+# Ignore images if needed
+# pc-builder-ui/pc-builder-ui/src/assets/images/
+
+# Environment files
+.env
+.env.*
+
+# Pytest
+.pytest_cache/
+
+# Pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# PyCharm
+.idea/
+
+# Test output
+htmlcov/
+
+# Coverage reports
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Sphinx documentation
+docs/_build/
+
+# pyright
+pyrightconfig.json
+
+# Pylint
+pylint-report.txt
+pylint-global.txt
+
+# Cython debug symbols
+cython_debug/

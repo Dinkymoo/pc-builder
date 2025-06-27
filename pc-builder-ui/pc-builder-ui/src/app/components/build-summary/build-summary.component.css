@@ -1,0 +1,26 @@
+* {
+  width: 100%;
+}
+
+.build-summary {
+  padding: 3rem 0 3rem 0;
+  width: 100%;
+}
+
+.build-summary form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.build-summary .price-filter {
+  display: flex;
+  gap: 2rem;
+}
+
+.build-summary #category,
+.build-summary #search {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

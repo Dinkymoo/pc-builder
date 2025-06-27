@@ -1,0 +1,26 @@
+<div class="product-filter">
+  <form>
+    <div>
+      <label for="search">Search:</label>
+      <input id="search" type="text" [(ngModel)]="searchTerm" name="search" placeholder="Search products..." />
+    </div>
+    <div>
+      <label for="category">Category:</label>
+      <select id="category" [(ngModel)]="selectedCategory" name="category">
+        <option value="">All</option>
+        @for (category of categories; track category) {
+          <option [value]="category">{{ category }}</option>
+        }
+      </select>
+    </div>
+    <div class="price-filter">
+      <label>Price Range:</label>
+      <label for="priceMin">Price Min:</label>
+      <input id="priceMin" type="number" [(ngModel)]="priceMin" name="priceMin" min="0" />
+      <label for="priceMax">Price Max:</label>
+      <input id="priceMax" type="number" [(ngModel)]="priceMax" name="priceMax" min="0" />
+    </div>
+    <button type="button" (click)="applyFilter()">Apply Filter</button>
+    <button type="button" (click)="resetFilter()">Reset</button>
+  </form>
+</div>

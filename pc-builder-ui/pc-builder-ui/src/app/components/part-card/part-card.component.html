@@ -1,0 +1,9 @@
+<div class="part-card">
+  <!-- <pre>{{ part | json }}</pre> -->
+  
+  <img #image [src]="part?.imageUrl" alt="{{ part.name }}" (error)="onImageError(image)" />
+  <h3>{{ part.name }}</h3>
+  <p>{{ part.description }}</p>
+  <p><strong>€{{ part.price }}</strong></p>
+  <button (click)="add(part)">Add to Build</button>
+</div>

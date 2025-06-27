@@ -1,0 +1,27 @@
+
+/* Styles for the AppComponent */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+.container {
+    padding: 20px;
+}
+
+.button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #2980b9;
+}

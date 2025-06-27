@@ -1,0 +1,20 @@
+<div class="part-selector">
+  <h4>graphic card selector works</h4>
+  <h2>Select {{ category | uppercase }}</h2>
+  <div class="part-grid">
+    @for (card of filteredGraphicCards; track card) {
+    <app-part-card [part]="card" (onPartAdded)="onGraphicCardAdded(card)">
+    </app-part-card>
+    }
+
+
+
+    @if (filteredGraphicCards.length === 0) {
+    <app-part-card [part]="{ name: 'No graphic cards found', description: 'Please adjust your filters.', price: 0 }">
+      <p>No graphic cards found. Please adjust your filters.</p>
+      <button (click)="resetFilter()">Reset Filters</button>
+    </app-part-card>
+    }
+
+  </div>
+</div>

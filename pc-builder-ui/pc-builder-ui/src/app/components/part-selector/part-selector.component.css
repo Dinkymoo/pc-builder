@@ -1,0 +1,13 @@
+.part-selector {
+ padding: 1rem;
+ background-color: #f60606;    
+
+}           
+
+
+.part-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  background-color: #27ae60;
+}
