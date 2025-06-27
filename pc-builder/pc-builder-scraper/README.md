@@ -37,3 +37,17 @@
 - See `upload_to_s3.py` for automated S3 upload.
 - Ensure your S3 bucket is up to date before running the backend.
 
+# Node
+node_modules/
+dist/
+# Python
+.venv/
+__pycache__/
+*.pyc
+# Environment/config
+.env
+.env.*
+# OS/Editor
+.DS_Store
+.vscode/
+

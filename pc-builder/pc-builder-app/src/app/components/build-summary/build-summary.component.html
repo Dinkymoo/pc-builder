@@ -1,0 +1,18 @@
+<div class="build-summary">
+
+  <h2>Build Summary</h2>
+  <div class="summary-grid">
+    <ng-container *ngIf="selectedGraphicCards.length > 0; else noSelection">
+      <div *ngFor="let card of selectedGraphicCards" class="summary-item">
+        <h3>{{ card.name }}</h3>
+        <p>{{ card.description }}</p>
+        <p><strong>€{{ card.price }}</strong></p>
+      </div>
+    </ng-container>
+    <ng-template #noSelection>
+      <div class="summary-item">
+        <p>No graphic cards selected. Please select cards to build your PC.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

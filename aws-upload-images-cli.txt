@@ -1,0 +1,5 @@
+# Upload all images in cdn-images/ to your S3 bucket using the AWS CLI
+aws s3 cp cdn-images/ s3://pc-builder-bucket-dvg-2025/images/ --recursive
+
+# This will upload all files in cdn-images/ to the images/ prefix in your bucket.
+# Make sure to update the bucket name if you change it in the future.

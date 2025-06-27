@@ -1,0 +1,10 @@
+<app-navbar></app-navbar>
+<div class="app-content">
+  <app-product-filter></app-product-filter>
+  <app-part-selector (onGraphicCardSelect)="onGraphicCardAdded($event)"></app-part-selector>
+  <app-build-summary [selectedGraphicCards]="selectedGraphicCards"></app-build-summary>
+  <app-compatibility-checker></app-compatibility-checker>
+  <app-generate-image></app-generate-image>
+  <app-image-result></app-image-result>
+</div>
+<app-footer></app-footer>
