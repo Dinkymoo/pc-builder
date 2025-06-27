@@ -1,8 +1,10 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from typing import List, Optional
 from pydantic import BaseModel
 import csv
+import os
 
 app = FastAPI()
 
@@ -26,8 +28,11 @@ class GraphicCard(BaseModel):
     imageUrl: Optional[str] = None
     compatibility: Optional[List[str]] = None
 
+# Use Docker-friendly absolute paths for CSV and images
+CSV_PATH = "data-results/graphics-cards.csv"
+IMAGES_DIR = "cdn-images"
+
 # Load graphics cards from CSV
-CSV_PATH = '../../data-results/graphics-cards.csv'
 graphic_cards_db = []
 with open(CSV_PATH, newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
@@ -46,7 +51,7 @@ with open(CSV_PATH, newline='', encoding='utf-8') as csvfile:
             price=price,
             inStock=True,
             description=row['Specs'],
-            imageUrl=row['Image URL'],
+            imageUrl=row.get('Image Path', ''),
             compatibility=[]
         ))
 
@@ -62,5 +67,12 @@ def get_graphic_card(card_id: int):
         if card.id == card_id:
             return card
     return {"error": "Graphic card not found"}
+
+@app.get("/images/{image_filename}")
+def serve_image(image_filename: str):
+    image_path = os.path.join(IMAGES_DIR, image_filename)
+    if os.path.exists(image_path):
+        return FileResponse(image_path)
+    return {"error": "Image not found"}
 
 app.include_router(router)

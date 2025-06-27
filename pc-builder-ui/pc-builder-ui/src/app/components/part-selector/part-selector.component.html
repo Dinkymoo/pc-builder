@@ -3,7 +3,7 @@
   <h2>Select {{ category | uppercase }}</h2>
   <div class="part-grid">
     @for (card of filteredGraphicCards; track card) {
-    <app-part-card [part]="card" (onPartAdded)="onGraphicCardAdded(card)">
+    <app-part-card [part]="card" [imageUrl]="getImageUrl(card)" (onPartAdded)="onGraphicCardAdded(card)">
     </app-part-card>
     }
 

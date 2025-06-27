@@ -5,11 +5,14 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install dependencies
-COPY requirements.txt ./
+COPY pc-builder-ui/pc-builder-bff/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend code
-COPY . .
+COPY pc-builder-ui/pc-builder-bff/ .
+# Copy data-results and cdn-images from monorepo root
+COPY data-results ./data-results
+COPY cdn-images ./cdn-images
 
 # Expose port
 EXPOSE 8000

@@ -10,6 +10,7 @@ import { Category, GraphicCard, PartWithCategoryAndCompatibility } from '../mode
 export class PartCardComponent implements OnInit {
 
   @Input() part!: PartWithCategoryAndCompatibility;
+  @Input() imageUrl: string = 'assets/images/default-part-image.png'; // Add this line
   @Output() onPartAdded = new EventEmitter<GraphicCard>();
   constructor() { }
 

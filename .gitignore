@@ -45,7 +45,7 @@ yarn-error.log*
 *.tsv
 *.sqlite
 *.db
-data-results/
+# data-results/
 
 # Docker
 *.pid
@@ -103,3 +103,7 @@ pylint-global.txt
 
 # Cython debug symbols
 cython_debug/
+
+# Generated images
+# pc-builder-ui/src/assets/images/
+# cdn-images/

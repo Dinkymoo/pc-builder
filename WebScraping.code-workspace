@@ -13,7 +13,11 @@
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
             "source.organizeImports": "explicit"
-        }
+        },
+        "editor.fontSize": 14,
+        "editor.defaultFormatter": "GitHub.copilot",
+        "editor.accessibilityPageSize": 600,
+        "editor.bracketPairColorization.independentColorPoolPerBracketType": true
     },
     "extensions": {
         "recommendations": [

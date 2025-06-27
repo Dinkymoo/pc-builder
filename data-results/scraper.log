@@ -1,8 +1,0 @@
-2025-06-27 12:48:55,196 - __main__ - INFO - Initialized scraper for https://quotes.toscrape.com
-2025-06-27 12:48:55,197 - __main__ - INFO - Fetching https://quotes.toscrape.com
-2025-06-27 12:48:55,696 - __main__ - ERROR - Error saving data to quotes.csv: All arrays must be of the same length
-2025-06-27 12:50:23,916 - __main__ - INFO - Initialized scraper for https://quotes.toscrape.com
-2025-06-27 12:50:23,917 - __main__ - INFO - Fetching https://quotes.toscrape.com
-2025-06-27 12:50:24,372 - __main__ - INFO - Data saved to quotes.csv
-2025-06-27 12:50:24,373 - __main__ - INFO - Renamed scraper.log to graphics-cards.log
-2025-06-27 12:50:24,374 - __main__ - INFO - Removed old scraper.log file

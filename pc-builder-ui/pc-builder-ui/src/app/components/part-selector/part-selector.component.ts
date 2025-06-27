@@ -22,7 +22,7 @@ export class PartSelectorComponent implements OnInit {
     private httpClient: HttpClientService
   ) {
     if (this.summaryMode === false) {
-      httpClient.setBaseUrl('http://127.0.0.1:8000/api')
+      httpClient.setBaseUrl('http://127.0.0.1:8000')
       this.httpClient.get<GraphicCard[]>('graphic-cards').subscribe(
         (data: GraphicCard[]) => {
           // Always show all cards by default, regardless of category
@@ -65,7 +65,11 @@ export class PartSelectorComponent implements OnInit {
   }
 
   getImageUrl(card: GraphicCard): string {
-    return card.imageUrl || 'assets/images/default-part-image.png';
+    // If the card has an imageUrl, rewrite it to use the backend image endpoint
+    if (card.imageUrl && card.imageUrl.startsWith('/cdn-images/')) {
+      return `http://127.0.0.1:8000/images/${card.imageUrl.replace('/cdn-images/', '')}`;
+    }
+    return 'assets/images/default-part-image.png';
   }
 
   getDescription(card: GraphicCard): string {
