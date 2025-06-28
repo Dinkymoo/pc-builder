@@ -76,13 +76,6 @@ router = APIRouter(prefix="/api")
 def get_graphic_cards():
     return graphic_cards_db
 
-@app.get("/graphic-cards/{card_id}", response_model=GraphicCard)
-def get_graphic_card(card_id: int):
-    for card in graphic_cards_db:
-        if card.id == card_id:
-            return card
-    return {"error": "Graphic card not found"}
-
 @app.get("/images/{image_filename}")
 def serve_image(image_filename: str):
     try:
