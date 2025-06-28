@@ -1,5 +1,27 @@
 # PC Builder Scraper
 
+## Structure
+
+```
+pc-builder-scraper/
+├── scraper/
+│   ├── __init__.py  # WebScraper class
+│   └── main.py      # Entrypoint for scraping
+├── requirements.txt
+├── README.md
+```
+
+## Usage
+
+1. Install dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+2. Run the scraper:
+   ```sh
+   python -m scraper.main
+   ```
+
 ## Architecture Overview
 
 ```

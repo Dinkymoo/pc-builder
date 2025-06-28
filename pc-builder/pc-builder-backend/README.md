@@ -3,6 +3,18 @@
 ## Overview
 This backend serves PC part data and images to the Angular frontend. It loads the graphics card CSV directly from AWS S3 at startup and serves images via S3 presigned URLs.
 
+## Project Structure
+
+```
+pc-builder-backend/
+├── app/
+│   ├── __init__.py
+│   └── main.py
+├── requirements.txt
+├── Dockerfile
+├── README.md
+```
+
 ## Setup
 
 1. Create a virtual environment (optional but recommended):
@@ -24,7 +36,7 @@ This backend serves PC part data and images to the Angular frontend. It loads th
    ```
 4. Run the server:
    ```sh
-   uvicorn main:app --reload
+   uvicorn app.main:app --reload
    ```
 
 ## Endpoints
