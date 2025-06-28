@@ -6,8 +6,8 @@ from botocore.exceptions import ClientError
 # Set these with your AWS credentials and bucket info
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_REGION = os.environ.get('AWS_REGION', 'us-east-1')
-BUCKET_NAME = os.environ.get('S3_BUCKET', 'pc-builder-data')
+AWS_REGION = os.environ.get('AWS_REGION', 'eu-west-3')
+BUCKET_NAME = os.environ.get('BUCKET_NAME', 'pc-builder-data')
 
 s3 = boto3.client(
     's3',
