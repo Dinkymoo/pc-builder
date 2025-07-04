@@ -18,6 +18,13 @@ ENV/
 # macOS
 .DS_Store
 
+# Generated data files
+data-results/*.csv
+data-results/*.log
+data-results/data/
+cdn-images/*
+!cdn-images/.gitkeep
+
 # Node
 node_modules/
 dist/
