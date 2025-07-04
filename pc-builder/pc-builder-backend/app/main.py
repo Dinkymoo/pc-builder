@@ -208,3 +208,15 @@ def reload_data():
 
 # SECURITY: Use environment variables for all secrets and credentials. In production, use a secure secret manager (e.g., AWS Secrets Manager).
 app.include_router(router)
+
+@app.get("/health", tags=["Health"])
+async def health_check():
+    """
+    Health check endpoint for AWS ECS.
+    Returns status and version information to verify the service is running properly.
+    """
+    return {
+        "status": "healthy",
+        "version": "1.0.0",
+        "service": "pc-builder-backend"
+    }

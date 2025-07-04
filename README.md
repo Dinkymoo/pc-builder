@@ -90,6 +90,20 @@ S3_BUCKET=your-bucket-name
 
 See [Developer Setup Guide](DEVELOPER_SETUP.md) for complete environment setup instructions.
 
+## AWS Deployment
+
+This project supports automated deployment to AWS ECS using GitHub Actions:
+
+```bash
+# View deployment status
+aws ecs describe-services --cluster pc-builder-cluster --services pc-builder-service --region eu-west-3
+
+# Monitor logs
+aws logs get-log-events --log-group-name "/ecs/pc-builder-backend" --log-stream-name "latest" --region eu-west-3
+```
+
+For detailed deployment instructions, see [AWS Deployment Guide](AWS_DEPLOYMENT.md).
+
 ## Security Controls
 
 This project uses several security controls:
