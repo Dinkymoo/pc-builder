@@ -11,6 +11,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy app code
 COPY app ./app
 
+# Create directory and copy local CSV file as fallback
+RUN mkdir -p /workspace/data-results
+COPY graphics-cards.csv /workspace/data-results/graphics-cards.csv
+
 # Expose port
 EXPOSE 8000
 
