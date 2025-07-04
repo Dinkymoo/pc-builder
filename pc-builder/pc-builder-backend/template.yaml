@@ -1,6 +1,18 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: FastAPI backend for PC Builder running on AWS Lambda
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Environment:
+      Variables:
+        ENVIRONMENT: production
+        AWS_REGION: eu-west-3
+        S3_BUCKET: pc-builder-bucket-dvg-2025
+        S3_CSV_KEY: graphics-cards.csv
+
 Resources:
   FastApiFunction:
     Type: AWS::Serverless::Function
@@ -8,16 +20,28 @@ Resources:
       CodeUri: .
       Handler: app.main.handler
       Runtime: python3.11
-      Timeout: 30
-      MemorySize: 512
-      Environment:
-        Variables:
-          MY_AWS_REGION: eu-west-3
-          S3_BUCKET: pc-builder-bucket-dvg-2025
-          S3_CSV_KEY: graphics-cards.csv
+      Policies:
+        - S3ReadPolicy:
+            BucketName: pc-builder-bucket-dvg-2025
       Events:
-        Api:
+        ApiEvents:
           Type: Api
           Properties:
             Path: /{proxy+}
             Method: ANY
+        RootPath:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+
+Outputs:
+  FastApiFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt FastApiFunction.Arn
+  ApiURL:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  ApiId:
+    Description: "API Gateway ID"
+    Value: !Ref ServerlessRestApi
