@@ -1,0 +1,53 @@
+#!/bin/zsh
+# PC Builder Project-specific zsh configuration
+# Usage: source .zshrc-pc-builder from the project directory
+
+# Display a welcome message
+echo "🖥️  PC Builder Project Environment 🔧"
+echo "========================================"
+
+# Set custom prompt
+export PROMPT="%F{blue}pc-builder%f %F{green}%1~%f $ "
+
+# Project-specific environment variables
+export PC_BUILDER_PROJECT_ROOT="$(pwd)"
+export S3_BUCKET="pc-builder-bucket-dvg-2025"  # Change to your bucket name
+export AWS_REGION="eu-west-3"  # Change to your AWS region
+
+# Add convenient aliases
+alias pcb-backend="cd $PC_BUILDER_PROJECT_ROOT/pc-builder/pc-builder-backend"
+alias pcb-frontend="cd $PC_BUILDER_PROJECT_ROOT/pc-builder/pc-builder-app"
+alias pcb-scraper="cd $PC_BUILDER_PROJECT_ROOT/pc-builder/pc-builder-scraper"
+alias pcb-run="$PC_BUILDER_PROJECT_ROOT/start-all.sh"
+alias pcb-test="$PC_BUILDER_PROJECT_ROOT/test-all.py"
+alias pcb-dev="$PC_BUILDER_PROJECT_ROOT/dev-all.sh"
+
+# Auto-activate virtual environment if it exists
+if [ -d "$PC_BUILDER_PROJECT_ROOT/pc-builder/.venv" ]; then
+  source "$PC_BUILDER_PROJECT_ROOT/pc-builder/.venv/bin/activate"
+  echo "✅ Virtual environment activated"
+else
+  echo "❌ Virtual environment not found at $PC_BUILDER_PROJECT_ROOT/pc-builder/.venv"
+  echo "   Run: python -m venv pc-builder/.venv && source pc-builder/.venv/bin/activate"
+fi
+
+# Display available commands
+echo "\nAvailable commands:"
+echo "  pcb-backend   - Navigate to backend directory"
+echo "  pcb-frontend  - Navigate to frontend directory"
+echo "  pcb-scraper   - Navigate to scraper directory"
+echo "  pcb-run       - Start all services"
+echo "  pcb-test      - Run all tests"
+echo "  pcb-dev       - Start development environment"
+echo "\nProject root: $PC_BUILDER_PROJECT_ROOT"
+echo "S3 Bucket: $S3_BUCKET"
+echo "AWS Region: $AWS_REGION"
+
+# Open GitHub Copilot instructions in VS Code if available
+if command -v code >/dev/null 2>&1; then
+  echo "\n📝 GitHub Copilot instructions available at:"
+  echo "   $PC_BUILDER_PROJECT_ROOT/COPILOT_INSTRUCTIONS.md"
+  echo "   Run: code $PC_BUILDER_PROJECT_ROOT/COPILOT_INSTRUCTIONS.md"
+fi
+
+echo "\n========================================"

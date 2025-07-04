@@ -107,3 +107,60 @@ cython_debug/
 # Generated images
 # pc-builder-ui/src/assets/images/
 # cdn-images/
+
+# AWS SAM
+.aws-sam/
+samconfig.toml
+
+# Python packages installed with pip install -t .
+# These should not be tracked in Git
+pc-builder/pc-builder-backend/annotated_types/
+pc-builder/pc-builder-backend/annotated_types-*.dist-info/
+pc-builder/pc-builder-backend/anyio/
+pc-builder/pc-builder-backend/anyio-*.dist-info/
+pc-builder/pc-builder-backend/bin/
+pc-builder/pc-builder-backend/boto3/
+pc-builder/pc-builder-backend/boto3-*.dist-info/
+pc-builder/pc-builder-backend/botocore/
+pc-builder/pc-builder-backend/botocore-*.dist-info/
+pc-builder/pc-builder-backend/click/
+pc-builder/pc-builder-backend/click-*.dist-info/
+pc-builder/pc-builder-backend/dateutil/
+pc-builder/pc-builder-backend/dotenv/
+pc-builder/pc-builder-backend/fastapi/
+pc-builder/pc-builder-backend/fastapi-*.dist-info/
+pc-builder/pc-builder-backend/h11/
+pc-builder/pc-builder-backend/h11-*.dist-info/
+pc-builder/pc-builder-backend/idna/
+pc-builder/pc-builder-backend/idna-*.dist-info/
+pc-builder/pc-builder-backend/jmespath/
+pc-builder/pc-builder-backend/jmespath-*.dist-info/
+pc-builder/pc-builder-backend/mangum/
+pc-builder/pc-builder-backend/mangum-*.dist-info/
+pc-builder/pc-builder-backend/pydantic/
+pc-builder/pc-builder-backend/pydantic-*.dist-info/
+pc-builder/pc-builder-backend/pydantic_core/
+pc-builder/pc-builder-backend/pydantic_core-*.dist-info/
+pc-builder/pc-builder-backend/python_dateutil-*.dist-info/
+pc-builder/pc-builder-backend/python_dotenv-*.dist-info/
+pc-builder/pc-builder-backend/s3transfer/
+pc-builder/pc-builder-backend/s3transfer-*.dist-info/
+pc-builder/pc-builder-backend/six.py
+pc-builder/pc-builder-backend/six-*.dist-info/
+pc-builder/pc-builder-backend/sniffio/
+pc-builder/pc-builder-backend/sniffio-*.dist-info/
+pc-builder/pc-builder-backend/starlette/
+pc-builder/pc-builder-backend/starlette-*.dist-info/
+pc-builder/pc-builder-backend/typing_extensions.py
+pc-builder/pc-builder-backend/typing_extensions-*.dist-info/
+pc-builder/pc-builder-backend/typing_inspection/
+pc-builder/pc-builder-backend/typing_inspection-*.dist-info/
+pc-builder/pc-builder-backend/urllib3/
+pc-builder/pc-builder-backend/urllib3-*.dist-info/
+pc-builder/pc-builder-backend/uvicorn/
+pc-builder/pc-builder-backend/uvicorn-*.dist-info/
+
+# Generic pattern to catch any other installed packages
+pc-builder/pc-builder-backend/*.dist-info/
+pc-builder/pc-builder-backend/*.egg-info/
+
