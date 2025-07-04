@@ -178,6 +178,10 @@ def main():
         "--all", action="store_true",
         help="Scan all Python files in the project (default when no other options provided)"
     )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true",
+        help="Show detailed output even when scanning staged files"
+    )
     args = parser.parse_args()
     
     # Get files to scan based on command-line options
@@ -235,12 +239,21 @@ def main():
     try:
         # SECURITY: Use subprocess.run with arguments as a list (not shell=True)
         # This prevents command injection vulnerabilities
+        
+        # Add formatted output option for pre-commit integration
+        bandit_args = ["bandit", "-ll", "-r"]
+        
+        # For pre-commit hooks, use a more concise output format
+        if args.staged and not args.verbose:
+            bandit_args.extend(["-f", "custom", "--msg-template", "{abspath}:{line}: {severity}: {test_id}: {msg}"])
+        
         result = subprocess.run(
-            ["bandit", "-ll", "-r"] + files,
+            bandit_args + files,
             capture_output=True,
             text=True,
             env=minimal_env
         )
+        
         # Print output but sanitize it first
         stdout = result.stdout
         if stdout:
