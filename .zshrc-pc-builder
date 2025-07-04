@@ -14,6 +14,18 @@ export PC_BUILDER_PROJECT_ROOT="$(pwd)"
 export S3_BUCKET="pc-builder-bucket-dvg-2025"  # Change to your bucket name
 export AWS_REGION="eu-west-3"  # Change to your AWS region
 
+#Disable default virtual environment prompt
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# Create a function to show a minimal venv indicator
+function virtualenv_info {
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    echo "($(basename $VIRTUAL_ENV)) "
+  fi
+}
+
+# Set a minimal prompt with current directory and virtualenv indicator
+PROMPT='$(virtualenv_info)%1~ $ '
 # Add convenient aliases
 alias pcb-backend="cd $PC_BUILDER_PROJECT_ROOT/pc-builder/pc-builder-backend"
 alias pcb-frontend="cd $PC_BUILDER_PROJECT_ROOT/pc-builder/pc-builder-app"
