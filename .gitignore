@@ -52,7 +52,7 @@ yarn-error.log*
 *.tsv
 *.sqlite
 *.db
-# data-results/
+data-results/
 
 # Docker
 *.pid
