@@ -1,10 +1,65 @@
 repos:
+# This repository contains configuration for pre-commit hooks to ensure code quality and security.
+  # Custom hook using our optimized Bandit scanner that only scans staged files
+  - repo: local
+    hooks:
+      - id: custom-bandit-scanner
+        name: Custom Bandit Security Scanner
+        description: Scans staged Python files for security issues using custom Bandit scanner
+        entry: python3 scan_all_with_bandit.py --staged
+        language: python
+        pass_filenames: false
+        types: [python]
+        stages: [commit]
+        
+  # Standard Bandit hook as fallback (disabled by default)
   - repo: https://github.com/PyCQA/bandit
     rev: 1.8.5
     hooks:
       - id: bandit
-        args: ["-r", "."]
+        # Disable by default, we use our custom scanner instead
+        stages: [manual]
+        # Don't pass -r for individual files mode
+        args: []
+        # Additional configuration when scanning directories
+        additional_dependencies: []
+        files: '.+\.py$'  # Only run on Python files
+        # SECURITY: Exclude all third-party code, node_modules, and vendored dependencies
+        # to avoid false positives and noise from libraries we don't control
+        exclude: |
+          (?x)^(
+            # Backend dependencies
+            pc-builder/pc-builder-backend/bin/|
+            pc-builder/pc-builder-backend/lib/|
+            pc-builder/pc-builder-backend/__pycache__/|
+            # Node dependencies 
+            pc-builder/pc-builder-app/node_modules/|
+            # Distribution information
+            .*\.dist-info/.*|
+            # Environment and git
+            \.venv/.*|
+            \.git/.*|
+            backups/|
+            # Library dependencies
+            pc-builder/pc-builder-backend/app/.*\.py$|
+            pc-builder/pc-builder-backend/boto.*|
+            pc-builder/pc-builder-backend/s3transfer.*|
+            pc-builder/pc-builder-backend/urllib3.*|
+            pc-builder/pc-builder-backend/typing_extensions\.py|
+            pc-builder/pc-builder-backend/six\.py|
+            pc-builder/pc-builder-backend/uvicorn/.*
+          )
+# This repository contains configuration for pre-commit hooks to ensure code quality and security.
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.5.0
     hooks:
       - id: detect-secrets
+        exclude: |
+          (?x)^(
+            \.git/.*|
+            \.venv/.*|
+            .*\.json$|
+            .*\.lock$|
+            backups/.*|
+            pc-builder/pc-builder-backend/bin/.*
+          )

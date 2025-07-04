@@ -4,7 +4,7 @@ import pandas as pd
 import time
 import random
 import logging
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 logging.basicConfig(
     level=logging.INFO,
@@ -24,14 +24,16 @@ class WebScraper:
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         }
         logger.info(f"Initialized scraper for {base_url}")
-    def get_page(self, url: str) -> BeautifulSoup:
+    def get_page(self, url: str) -> Optional[BeautifulSoup]:
         try:
             logger.info(f"Fetching {url}")
-            response = requests.get(url, headers=self.headers)
+            # BANDIT B113: Always specify a timeout to avoid hanging requests.
+            response = requests.get(url, headers=self.headers, timeout=10)
             response.raise_for_status()
             soup = BeautifulSoup(response.text, 'lxml')
             return soup
         except requests.exceptions.RequestException as e:
+            # SECURITY: Avoid logging sensitive data in production logs.
             logger.error(f"Error fetching {url}: {e}")
             return None
     def extract_data(self, soup: BeautifulSoup, selectors: Dict) -> Dict:
@@ -57,12 +59,14 @@ class WebScraper:
             if soup:
                 data = self.extract_data(soup, selectors)
                 all_results.append(data)
+            # BANDIT B311: Use of 'random' is safe here for delays, not for security/crypto.
             wait_time = delay + random.random()
             logger.debug(f"Waiting {wait_time:.2f} seconds before next request")
             time.sleep(wait_time)
         return all_results
     def save_to_csv(self, data: Union[List[Dict], Dict], filename: str) -> None:
         try:
+            # SECURITY: Avoid logging sensitive data or file paths in production logs.
             if isinstance(data, list):
                 combined_data = {}
                 for d in data:
@@ -85,4 +89,5 @@ class WebScraper:
             df.to_csv(filename, index=False)
             logger.info(f"Data saved to {filename}")
         except Exception as e:
-            logger.error(f"Error saving data to {filename}: {e}")
+            # SECURITY: Avoid exposing sensitive info in logs
+            logger.error(f"Error saving data to {filename}: {type(e).__name__}")

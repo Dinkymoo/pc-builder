@@ -1,5 +1,8 @@
 """
 Utility functions for web scraping
+
+SECURITY: The 'random' module is imported for use in non-security-sensitive delays only.
+Do NOT use 'random' for cryptographic or security purposes anywhere in this module.
 """
 import time
 import random
@@ -18,6 +21,8 @@ def random_delay(min_seconds=1, max_seconds=3):
         min_seconds: Minimum delay in seconds
         max_seconds: Maximum delay in seconds
     """
+    # BANDIT B311: Use of 'random' is safe here because delays are not security-sensitive.
+    # Do NOT use 'random' for cryptographic or security purposes.
     delay = min_seconds + random.random() * (max_seconds - min_seconds)
     logger.debug(f"Waiting for {delay:.2f} seconds")
     time.sleep(delay)
