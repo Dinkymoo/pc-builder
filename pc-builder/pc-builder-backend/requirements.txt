@@ -1,6 +1,6 @@
 fastapi
 uvicorn
 boto3
-pydantic
 python-dotenv
 mangum
+pydantic>=2,<3
