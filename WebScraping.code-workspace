@@ -17,7 +17,19 @@
         "editor.fontSize": 14,
         "editor.defaultFormatter": "GitHub.copilot",
         "editor.accessibilityPageSize": 600,
-        "editor.bracketPairColorization.independentColorPoolPerBracketType": true
+        "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+        
+        // Terminal settings to run custom zsh profile
+        "terminal.integrated.defaultProfile.osx": "zsh",
+        "terminal.integrated.profiles.osx": {
+            "zsh": {
+                "path": "/bin/zsh",
+                "args": ["-c", "source \"${workspaceFolder}/.zshrc-pc-builder\" && exec /bin/zsh -i"]
+            }
+        },
+        "terminal.integrated.env.osx": {
+            "PC_BUILDER_WORKSPACE": "${workspaceFolder}"
+        }
     },
     "extensions": {
         "recommendations": [
