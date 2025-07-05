@@ -60,6 +60,19 @@ S3_CSV_KEY = os.environ.get('S3_CSV_KEY', 'graphics-cards.csv')
 
 s3 = boto3.client('s3', region_name=AWS_REGION)
 
+def generate_presigned_image_url(image_path: str) -> str:
+    if not image_path:
+        return ""  # Or a default image URL from S3
+    try:
+        return s3.generate_presigned_url(
+            'get_object',
+            Params={'Bucket': S3_BUCKET, 'Key': f'images/{image_path}'},
+            ExpiresIn=3600
+        )
+    except Exception as e:
+        logger.warning(f"Failed to generate presigned URL for {image_path}: {type(e).__name__}")
+        return ""
+
 def load_graphic_cards_from_s3():
     try:
         logger.info(f"Loading data from S3 bucket: {S3_BUCKET}")
@@ -76,8 +89,8 @@ def load_graphic_cards_from_s3():
             except Exception:
                 price = 0.0
                 logger.debug(f"Price parsing error for product {idx}")
-            
-            # SECURITY: Validate and sanitize all fields from S3 if exposed to users
+            image_path = row.get('Image Path', '')
+            presigned_url = generate_presigned_image_url(image_path) if image_path else ""
             cards.append(GraphicCard(
                 id=idx,
                 name=row['Product Name'],
@@ -86,13 +99,12 @@ def load_graphic_cards_from_s3():
                 price=price,
                 inStock=True,
                 description=row['Specs'],
-                imageUrl=row.get('Image Path', ''),
+                imageUrl=presigned_url,
                 compatibility=[]
             ))
         logger.info(f"Successfully loaded {len(cards)} products from S3")
         return cards
     except Exception as e:
-        # SECURITY: Avoid returning raw exception messages to users. Log only necessary info.
         logger.warning(f"Error loading data from S3: {type(e).__name__}")
         return load_graphic_cards_from_local()
 
@@ -120,7 +132,8 @@ def load_graphic_cards_from_local():
                         except Exception:
                             price = 0.0
                             logger.debug(f"Price parsing error for product {idx}")
-                        # SECURITY: Validate and sanitize all fields from CSV if exposed to users
+                        image_path = row.get('Image Path', '')
+                        presigned_url = generate_presigned_image_url(image_path) if image_path else ""
                         cards.append(GraphicCard(
                             id=idx,
                             name=row['Product Name'],
@@ -129,13 +142,12 @@ def load_graphic_cards_from_local():
                             price=price,
                             inStock=True,
                             description=row['Specs'],
-                            imageUrl=row.get('Image Path', ''),
+                            imageUrl=presigned_url,
                             compatibility=[]
                         ))
                     logger.info(f"Successfully loaded {len(cards)} products from local file")
                     return cards
     except Exception as e:
-        # SECURITY: Avoid exposing internal error details in production
         logger.error(f"Error loading local data: {type(e).__name__}")
     return []
 
