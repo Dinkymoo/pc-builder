@@ -28,7 +28,12 @@ To get started with the PC Builder project, use the following commands:
 ./scripts/start/start-backend.sh
 
 # Start just the frontend service
-./scripts/start/start-frontend.sh
+  - id: bandit
+    name: Security Scanner (Bandit)
+    description: Scans Python files for security issues
+    files: \.py$
+    exclude: ^(.*/__pycache__/.*|.*\.dist-info/.*|.*/\..*)$
+    args: ["--skip=B101"]  # Skip assert warnings as they're not critical
 
 # Automated data workflow (scrape → upload → cleanup)
 ./workflow/pc-builder-workflow.py
@@ -164,3 +169,10 @@ When making changes:
 2. Use the pre-commit hooks to ensure code quality
 3. Run tests before submitting changes
 4. Follow the coding standards in [GitHub Copilot Instructions](COPILOT_INSTRUCTIONS.md)
+
+result = subprocess.run(
+    bandit_args + files,
+    capture_output=True,
+    text=True,
+    env=minimal_env
+)  # nosec B603
