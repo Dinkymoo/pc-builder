@@ -1,10 +1,10 @@
+import os
 from fastapi import FastAPI, APIRouter, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from typing import List, Optional
 from pydantic import BaseModel
 import csv
-import os
 import logging
 import boto3
 from botocore.exceptions import ClientError
@@ -153,14 +153,12 @@ def get_graphic_cards():
 
 @app.get("/graphic-cards", response_model=List[GraphicCard])
 def get_graphic_cards_root():
+    global graphic_cards_db  # Moved to the top to fix SyntaxError
     logger.info("API endpoint called: /graphic-cards with data length: {}".format(len(graphic_cards_db)))
     if len(graphic_cards_db) == 0:
-        # Try to reload the data if it's empty
-        global graphic_cards_db
         logger.warning("Data is empty, attempting to reload from S3...")
         graphic_cards_db = load_graphic_cards_from_s3()
         logger.info(f"Reload complete, loaded {len(graphic_cards_db)} products")
-    
     # Log the data structure to help debug
     if len(graphic_cards_db) > 0:
         logger.info(f"Sample data (first item): {graphic_cards_db[0].dict()}")
@@ -178,7 +176,6 @@ def get_graphic_cards_root():
             imageUrl="",
             compatibility=[]
         )]
-    
     return graphic_cards_db
 
 @app.get("/images/{image_filename}")
