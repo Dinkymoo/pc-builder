@@ -172,19 +172,25 @@ curl "${API_URL}graphics-cards"
 
 ### Common Issues
 
-1. **Deployment Permission Errors**:
+1. **Reserved Environment Variables Error**:
+   - AWS Lambda has certain reserved environment variables that you cannot set directly, including:
+     - `AWS_REGION`, `AWS_DEFAULT_REGION`, `AWS_ACCESS_KEY`, `AWS_SECRET_KEY`, `AWS_SESSION_TOKEN`, etc.
+   - Solution: Use custom variable names like `MY_AWS_REGION` instead
+   - Example error: "Lambda was unable to configure your environment variables because the environment variables you have provided contains reserved keys"
+
+2. **Deployment Permission Errors**:
    - Ensure your AWS user has the permissions: `cloudformation:*`, `lambda:*`, `apigateway:*`, `iam:CreateRole`, `iam:AttachRolePolicy`
    - Use `--capabilities CAPABILITY_IAM` with deployment commands
 
-2. **Missing Dependencies**:
+3. **Missing Dependencies**:
    - Make sure all dependencies are listed in `requirements.txt`
    - Some packages may need to be installed using Lambda Layers for size constraints
 
-3. **S3 Access from Lambda**:
+4. **S3 Access from Lambda**:
    - Make sure your Lambda function has proper permissions to access S3 buckets
    - Add an S3 policy to the function's role in the template.yaml
 
-4. **Timeout Issues**:
+5. **Timeout Issues**:
    - If you experience timeouts, increase the `Timeout` property in template.yaml
 
 ### Debugging Lambda Functions

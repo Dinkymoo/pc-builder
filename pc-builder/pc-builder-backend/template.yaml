@@ -9,7 +9,7 @@ Globals:
     Environment:
       Variables:
         ENVIRONMENT: production
-        AWS_REGION: eu-west-3
+        MY_AWS_REGION: eu-west-3  # Custom name to avoid AWS_REGION reserved name
         S3_BUCKET: pc-builder-bucket-dvg-2025
         S3_CSV_KEY: graphics-cards.csv
 
