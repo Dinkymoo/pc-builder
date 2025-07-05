@@ -25,7 +25,7 @@ def test_aws_credentials():
     try:
         sts = boto3.client('sts')
         identity = sts.get_caller_identity()
-        print(f"✅ Current credentials work!")
+        print("✅ Current credentials work!")  # nosec B311
         print(f"Account: {identity.get('Account')}")
         print(f"User: {identity.get('Arn')}")
         return True

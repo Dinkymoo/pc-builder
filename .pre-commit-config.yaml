@@ -1,16 +1,15 @@
 repos:
 # This repository contains configuration for pre-commit hooks to ensure code quality and security.
   # Custom hook using our optimized Bandit scanner that only scans staged files
-  - repo: local
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.5
     hooks:
-      - id: custom-bandit-scanner
-        name: Custom Bandit Security Scanner
-        description: Scans staged Python files for security issues using custom Bandit scanner
-        entry: python3 scan_all_with_bandit.py --staged
-        language: python
-        pass_filenames: false
-        types: [python]
-        stages: [commit]
+      - id: bandit
+        name: Security Scanner (Bandit)
+        description: Scans Python files for security issues
+        files: \.py$
+        exclude: ^(.*/__pycache__/.*|.*\.dist-info/.*|.*/\..*)$
+        args: ["--skip=B101"]  # Skip assert warnings as they're not critical
         
   # Standard Bandit hook as fallback (disabled by default)
   - repo: https://github.com/PyCQA/bandit
