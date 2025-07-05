@@ -1,0 +1,35 @@
+{
+  "version": "2.0",
+  "routeKey": "ANY /health",
+  "rawPath": "/health",
+  "rawQueryString": "",
+  "headers": {
+    "accept": "*/*",
+    "content-length": "0",
+    "host": "xifhvni3h7.execute-api.eu-west-3.amazonaws.com",
+    "user-agent": "curl/7.64.1",
+    "x-amzn-trace-id": "Root=1-5e66d96f-7491f09xmpl79d18acf3d050",
+    "x-forwarded-for": "127.0.0.1",
+    "x-forwarded-port": "443",
+    "x-forwarded-proto": "https"
+  },
+  "requestContext": {
+    "accountId": "554510949034",
+    "apiId": "xifhvni3h7",
+    "domainName": "xifhvni3h7.execute-api.eu-west-3.amazonaws.com",
+    "domainPrefix": "xifhvni3h7",
+    "http": {
+      "method": "GET",
+      "path": "/health",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "127.0.0.1",
+      "userAgent": "curl/7.64.1"
+    },
+    "requestId": "JKJaXmPLIAMF5Jg=",
+    "routeKey": "ANY /health",
+    "stage": "Prod",
+    "time": "31/Jul/2025:23:08:47 +0000",
+    "timeEpoch": 1627770527
+  },
+  "isBase64Encoded": false
+}

@@ -11,7 +11,15 @@ echo "🛠️ Building the SAM application..."
 sam build
 
 echo "🚀 Deploying to AWS Lambda..."
-sam deploy --guided
+# If the stack is in UPDATE_FAILED state, use --disable-rollback
+STACK_STATUS=$(aws cloudformation describe-stacks --stack-name pc-builder --query "Stacks[0].StackStatus" --output text 2>/dev/null || echo "DOES_NOT_EXIST")
+
+if [ "$STACK_STATUS" == "UPDATE_FAILED" ] || [ "$STACK_STATUS" == "UPDATE_ROLLBACK_FAILED" ]; then
+  echo "⚠️ Stack is in $STACK_STATUS state. Using --disable-rollback to recover..."
+  sam deploy --stack-name pc-builder --disable-rollback --capabilities CAPABILITY_IAM
+else
+  sam deploy --guided
+fi
 
 if [ $? -eq 0 ]; then
   echo "✅ Deployment completed successfully!"
@@ -25,8 +33,11 @@ if [ $? -eq 0 ]; then
   echo "🔍 Testing the health endpoint..."
   curl -s "${API_URL}health" | jq
 
-  echo "📋 To test the graphics cards endpoint:"
-  echo "curl ${API_URL}graphics-cards"
+  echo "📋 Testing the graphics cards endpoint..."
+  curl -s "${API_URL}graphic-cards" | jq -c '.[0:1]'
+  
+  echo "🔍 Testing S3 connectivity..."
+  curl -s "${API_URL}debug/check-s3" | jq
   
   echo "🔧 To check logs:"
   echo "sam logs -n FastApiFunction --stack-name pc-builder"

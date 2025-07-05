@@ -39,7 +39,9 @@ else:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-handler = Mangum(app)
+# Configure Mangum with API Gateway settings
+# The api_gateway_base_path parameter is set to the stage name to handle paths correctly
+handler = Mangum(app, lifespan="off", api_gateway_base_path="/Prod")
 class GraphicCard(BaseModel):
     id: int
     name: str
@@ -151,7 +153,32 @@ def get_graphic_cards():
 
 @app.get("/graphic-cards", response_model=List[GraphicCard])
 def get_graphic_cards_root():
-    logger.debug("API endpoint called: /graphic-cards")
+    logger.info("API endpoint called: /graphic-cards with data length: {}".format(len(graphic_cards_db)))
+    if len(graphic_cards_db) == 0:
+        # Try to reload the data if it's empty
+        global graphic_cards_db
+        logger.warning("Data is empty, attempting to reload from S3...")
+        graphic_cards_db = load_graphic_cards_from_s3()
+        logger.info(f"Reload complete, loaded {len(graphic_cards_db)} products")
+    
+    # Log the data structure to help debug
+    if len(graphic_cards_db) > 0:
+        logger.info(f"Sample data (first item): {graphic_cards_db[0].dict()}")
+    else:
+        logger.error("NO DATA AVAILABLE - Check S3 bucket and CSV file!")
+        # Return a single item with error details to help troubleshoot
+        return [GraphicCard(
+            id=0,
+            name="ERROR: No data loaded",
+            category="error",
+            manufacturer="System",
+            price=0.0,
+            inStock=False,
+            description="Check logs and S3 configuration. Use /debug/check-s3 endpoint.",
+            imageUrl="",
+            compatibility=[]
+        )]
+    
     return graphic_cards_db
 
 @app.get("/images/{image_filename}")
@@ -218,5 +245,133 @@ async def health_check():
     return {
         "status": "healthy",
         "version": "1.0.0",
-        "service": "pc-builder-backend"
+        "service": "pc-builder-backend",
+        "data_count": len(graphic_cards_db),
+        "s3_config": {
+            "region": AWS_REGION,
+            "bucket": S3_BUCKET,
+            "key": S3_CSV_KEY
+        }
     }
+
+@app.get("/debug/diagnostics", tags=["Debug"])
+async def system_diagnostics(request: Request):
+    """
+    Comprehensive system diagnostics for troubleshooting
+    """
+    # Check current working directory and files
+    import os
+    cwd = os.getcwd()
+    
+    # Collect local file paths for debugging
+    local_files = {}
+    possible_paths = [
+        'data-results/graphics-cards.csv',
+        '../data-results/graphics-cards.csv',
+        '../../data-results/graphics-cards.csv',
+        '../../../data-results/graphics-cards.csv',
+    ]
+    
+    for path in possible_paths:
+        local_files[path] = os.path.exists(path)
+        if os.path.exists(path):
+            try:
+                size = os.path.getsize(path)
+                local_files[f"{path}_size"] = f"{size} bytes"
+                # Read first line to verify it's valid CSV
+                with open(path, 'r', encoding='utf-8') as f:
+                    header = f.readline().strip()
+                    local_files[f"{path}_header"] = header
+            except Exception as e:
+                local_files[f"{path}_error"] = str(type(e).__name__)
+    
+    # Get environment variables (excluding secrets)
+    safe_env_vars = {k: v for k, v in os.environ.items() 
+                     if not any(secret in k.lower() for secret in 
+                               ['key', 'secret', 'token', 'password', 'credential'])}
+    
+    # Get request path info
+    path_info = {
+        "raw_path": str(request.url.path),
+        "base_url": str(request.base_url),
+        "url": str(request.url),
+        "method": request.method,
+        "headers": dict(request.headers)
+    }
+    
+    # Lambda context path info
+    lambda_context = {
+        "api_gateway_base_path": "/Prod",
+        "current_path": request.url.path,
+        "data_source": "S3" if len(graphic_cards_db) > 0 else "Empty/Failed"
+    }
+    
+    return {
+        "diagnostics": {
+            "environment": safe_env_vars,
+            "current_directory": cwd,
+            "local_files": local_files,
+            "request": path_info,
+            "lambda_context": lambda_context,
+            "data_loaded": len(graphic_cards_db),
+            "data_sample": str(graphic_cards_db[0].dict()) if len(graphic_cards_db) > 0 else "No data"
+        }
+    }
+
+@app.get("/debug/check-s3", tags=["Debug"])
+async def check_s3_connectivity():
+    """
+    Debug endpoint to check S3 connectivity
+    """
+    try:
+        # List objects in the S3 bucket
+        response = s3.list_objects_v2(Bucket=S3_BUCKET, MaxKeys=10)
+        objects = []
+        if 'Contents' in response:
+            objects = [obj['Key'] for obj in response['Contents']]
+        
+        # Check if the CSV file exists
+        csv_exists = False
+        csv_content = None
+        try:
+            s3.head_object(Bucket=S3_BUCKET, Key=S3_CSV_KEY)
+            csv_exists = True
+            
+            # Try to get the first few lines of the CSV
+            try:
+                obj = s3.get_object(Bucket=S3_BUCKET, Key=S3_CSV_KEY)
+                csv_bytes = obj['Body'].read(1024)  # Just read first 1KB
+                csv_content = csv_bytes.decode('utf-8')[:500] + "..." # Truncate for display
+            except Exception as csv_e:
+                logger.error(f"Error reading CSV content: {type(csv_e).__name__}")
+        except Exception as e:
+            logger.error(f"CSV file not found: {S3_CSV_KEY}, error: {type(e).__name__}")
+        
+        return {
+            "status": "success",
+            "bucket": S3_BUCKET,
+            "region": AWS_REGION,
+            "csv_key": S3_CSV_KEY,
+            "csv_exists": csv_exists,
+            "csv_preview": csv_content,
+            "data_loaded": len(graphic_cards_db),
+            "objects": objects[:10],  # Return first 10 objects
+            "environment": {
+                "environment": os.environ.get('ENVIRONMENT'),
+                "region_env": os.environ.get('MY_AWS_REGION')
+            }
+        }
+    except Exception as e:
+        logger.error(f"S3 check failed: {type(e).__name__}")
+        return {
+            "status": "error",
+            "error_type": type(e).__name__,
+            "bucket": S3_BUCKET,
+            "region": AWS_REGION,
+            "csv_key": S3_CSV_KEY,
+            "data_loaded": len(graphic_cards_db),
+            "environment": {
+                "environment": os.environ.get('ENVIRONMENT'),
+                "region_env": os.environ.get('MY_AWS_REGION')
+            }
+        }

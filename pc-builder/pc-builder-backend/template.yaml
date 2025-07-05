@@ -14,11 +14,17 @@ Globals:
         S3_CSV_KEY: graphics-cards.csv
 
 Resources:
+  DependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ./pc-builder-lambda-layer.zip
+      CompatibleRuntimes:
+        - python3.11
   FastApiFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: .
-      Handler: app.main.handler
+      Handler: app/main.handler
       Runtime: python3.11
       Policies:
         - S3ReadPolicy:

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import { HttpClientService } from '../../services/http-client.service';
 import { GraphicCard } from './test-data';
 
@@ -18,11 +19,17 @@ export class PartSelectorComponent implements OnInit {
   @Input() category: string = 'All'; // Default to 'All', will be set by parent component
   @Input() summaryMode: boolean = false; // Default to false, will be set by parent component
   @Output() onGraphicCardSelect: EventEmitter<GraphicCard> = new EventEmitter<GraphicCard>();
+  
   constructor(
     private httpClient: HttpClientService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    console.log('PartSelectorComponent initialized with category:', this.category);
+    
     if (this.summaryMode === false) {
-      httpClient.setBaseUrl('http://127.0.0.1:8000')
+      // Use environment configuration for API URL
+      this.httpClient.setBaseUrl(environment.apiUrl);
       this.httpClient.get<GraphicCard[]>('graphic-cards').subscribe(
         (data: GraphicCard[]) => {
           // Always show all cards by default, regardless of category
@@ -35,15 +42,10 @@ export class PartSelectorComponent implements OnInit {
           this.filteredGraphicCards = [];
         }
       );
-    }
-    else {
+    } else {
       // If summaryMode is true, we can set filteredGraphicCards to an empty array or handle it differently
       this.filteredGraphicCards = [];
     }
-  }
-
-  ngOnInit(): void {
-    console.log('PartSelectorComponent initialized with category:', this.category);
   }
 
   onGraphicCardAdded(card: GraphicCard) {

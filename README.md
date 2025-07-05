@@ -7,16 +7,28 @@ This project implements a PC Builder application with:
 - AWS S3 integration for image and data storage
 - AWS Lambda/SAM deployment
 
+> **Note (July 2025)**: The repository has been reorganized for better structure and maintainability.
+> See [Project Organization](docs/PROJECT_ORGANIZATION.md) for details on the new structure.
+
 ## Quick Start
 
 To get started with the PC Builder project, use the following commands:
 
 ```bash
+# Install development dependencies (first time setup)
+./scripts/setup/install-dev-dependencies.sh
+
 # Development environment (hot reload)
 ./workflow/dev-all.sh
 
 # Production-like environment (Docker + built frontend)
 ./workflow/start-all.sh
+
+# Start just the backend service
+./scripts/start/start-backend.sh
+
+# Start just the frontend service
+./scripts/start/start-frontend.sh
 
 # Automated data workflow (scrape → upload → cleanup)
 ./workflow/pc-builder-workflow.py
@@ -30,6 +42,19 @@ To get started with the PC Builder project, use the following commands:
 │   ├── pc-builder-app/    # Angular frontend
 │   ├── pc-builder-backend/# FastAPI backend with AWS integration
 │   └── pc-builder-scraper/# Web scraper components
+├── docs/                  # Project documentation
+├── scripts/               # Organized script directories
+│   ├── aws/               # AWS-related scripts
+│   ├── deploy/            # Deployment scripts
+│   ├── diagnostics/       # Diagnostic tools
+│   ├── setup/             # Setup and configuration scripts
+│   ├── start/             # Application startup scripts
+│   └── utils/             # Utility scripts
+├── tests/                 # Test scripts
+│   ├── api/               # API tests
+│   ├── aws/               # AWS service tests
+│   └── unit/              # Unit tests
+├── config/                # Configuration files
 ├── workflow/              # Workflow automation scripts
 ├── data-results/          # Generated CSV data (gitignored)
 └── cdn-images/            # Downloaded images (gitignored)
@@ -37,9 +62,13 @@ To get started with the PC Builder project, use the following commands:
 
 ## Documentation
 
-- [Developer Setup Guide](DEVELOPER_SETUP.md) - Complete setup instructions
-- [Workflow Scripts](workflow/README.md) - Details on automation scripts
-- Individual component READMEs in their respective directories
+- [Developer Setup Guide](docs/DEVELOPER_GUIDE.md) - Setting up the development environment
+- [Project Organization](docs/PROJECT_ORGANIZATION.md) - Project structure and organization principles
+- [Script Index](docs/SCRIPT_INDEX.md) - Complete list of all project scripts and utilities
+- [AWS Deployment Guide](docs/AWS_DEPLOYMENT.md) - Deploying to AWS ECS
+- [AWS Lambda Deployment](docs/AWS_LAMBDA_DEPLOYMENT.md) - Deploying the API to AWS Lambda
+- [API Gateway & Lambda Troubleshooting](docs/API_GATEWAY_LAMBDA_TROUBLESHOOTING.md) - Common issues and solutions
+- [Using AWS Lambda API](docs/USING_AWS_LAMBDA_API.md) - Using the deployed Lambda API
 
 ## Workflow Automation
 
@@ -70,11 +99,20 @@ The project includes several workflow scripts to automate common tasks:
 ### Testing
 
 ```bash
-# Run tests
+# Run all tests
 ./workflow/test-all.py
 
 # Test AWS credentials
-./workflow/test-aws-credentials.py
+python tests/aws/test-aws-credentials.py
+
+# Test API Gateway endpoints
+./tests/api/test-api-gateway.sh
+
+# Advanced API diagnostics
+./tests/api/test-api-gateway-enhanced.sh
+
+# Test S3 data access
+python scripts/aws/check_s3_data.py
 ```
 
 ## Environment Setup

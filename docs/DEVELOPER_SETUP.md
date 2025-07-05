@@ -1,5 +1,8 @@
 # Developer Setup Guide
 
+> **Note:** This document has been relocated to the [Developer Guide](docs/DEVELOPER_GUIDE.md) as part of repository reorganization.
+> For information about the new repository structure, see the [Project Organization Guide](docs/PROJECT_ORGANIZATION.md).
+
 This guide provides instructions for setting up multiple Git profiles and customizing your terminal experience for a more efficient development workflow.
 
 ## Setting Up Multiple Git Profiles

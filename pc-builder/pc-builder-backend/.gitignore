@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+.venv/
+venv/
+ENV/
+
+# VS Code
+.vscode/
+
+# AWS Lambda/SAM
+.aws-sam/
+packaged.yaml
+samconfig.toml
+*.zip
+lambda-layer/
+pc-builder-lambda-layer.zip
+lambda-layer.zip
+*-lambda-layer.zip
+
+# AWS deployed resources
+template-packaged.yaml
+template-exports.json
+template-configuration.json
+
+# Dependency directories
+site-packages/
+python/
+
+# AWS dependencies
+boto3/
+botocore/
+s3transfer/
+jmespath/
+dateutil/
+urllib3/
+six.py
+typing_extensions.py
+
+# Logs
+*.log
